@@ -7,4 +7,8 @@ end
 
 state.subscribe("main", onStateChange)
 
+state.saveState()
+
 state.current = states.digging
+
+state.loadState()

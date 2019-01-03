@@ -1,7 +1,7 @@
 require("constants/states.lua")
 require("extensions/table.lua")
 
-local defaultFilename = "state.dat"
+local DEFAULT_FILE_NAME = "state.dat"
 
 local state = {
   __privates = {
@@ -18,21 +18,6 @@ local state = {
     for k, f in pairs(__subscriptions) do
       f(self, k, ov, v)
     end
-  end,
-  loadState = function(fileName)
-    fileName = fileName or defaultFilename
-    if fs.exists(fileName) then
-      local file = fs.open(filename)
-      local text = file.readAll()
-      file.close()
-      __privates = textutils.unserialise(text)
-    end
-  end,
-  saveState = function(fileName)
-    fileName = fileName or defaultFilename
-    local file = fs.open(filename, w)
-    fs.write(textutils.serialise(__privates))
-    file.close()
   end
 }
 
@@ -47,6 +32,26 @@ local state_meta = {
     rawget(self, "__on_change")(self, k, ov, v)
   end
 }
+
+function state.loadState(fileName)
+  fileName = fileName or DEFAULT_FILE_NAME
+  if fs.exists(fileName) then
+    local file = fs.open(filename)
+    local text = file.readAll()
+    file.close()
+    local loaded = textutils.unserialise(text)
+    for k, v in pairs(loaded) do
+      self[k] = v
+    end
+  end
+end
+
+function state.saveState(fileName)
+  fileName = fileName or DEFAULT_FILE_NAME
+  local file = fs.open(filename, w)
+  fs.write(textutils.serialise(__privates))
+  file.close()
+end
 
 setmetatable(state, state_meta)
 
