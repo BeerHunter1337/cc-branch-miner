@@ -1,4 +1,4 @@
-function table.removeKey(t, k)
+function removeKey(t, k)
   local i = 0
   local keys, values = {}, {}
   for k, v in pairs(t) do
@@ -22,4 +22,10 @@ function table.removeKey(t, k)
   end
 
   return a
+end
+
+function tableLength(T)
+  local count = 0
+  for _ in pairs(T) do count = count + 1 end
+  return count
 end

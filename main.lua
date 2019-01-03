@@ -1,14 +1,20 @@
-require("state.lua")
-require("constants/states.lua")
+os.loadAPI("store.lua")
+os.loadAPI("constants/states.lua")
 
-local function onStateChange(state, k, ov, v)
+local mainStore = store.init("state.dat")
+
+local onStateChange = function(state, k, ov, v)
   print("State changed. New value of " .. k .. "=" .. v)
 end
 
-state.subscribe("main", onStateChange)
+store.subscribe(mainStore, "main", onStateChange)
 
-state.saveState()
+mainStore.test = "hey"
 
-state.current = states.digging
+store.saveState(mainStore)
+print("Store saved")
 
-state.loadState()
+mainStore.current = states.digging
+
+print("Restoring state")
+store.loadState(mainStore)

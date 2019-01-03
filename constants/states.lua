@@ -1,1 +1,3 @@
-states = {idle, digging, mining = 1, 2, 3}
+idle = 1
+digging = 2
+minig = 3
